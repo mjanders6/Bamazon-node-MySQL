@@ -1,0 +1,25 @@
+{
+  "name": "Bamazon-node-MySQL",
+  "version": "1.0.0",
+  "description": "Amazon like store front using MyQSL and Node.js",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjanders6/Bamazon-node-MySQL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjanders6/Bamazon-node-MySQL/issues"
+  },
+  "homepage": "https://github.com/mjanders6/Bamazon-node-MySQL#readme",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "inquirer": "^6.3.1",
+    "mysql2": "^1.6.5"
+  }
+}
