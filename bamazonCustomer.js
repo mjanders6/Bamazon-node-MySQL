@@ -12,21 +12,44 @@ const db = createConnection({
 
 db.connect(e => {
     if (e) { console.log(e) } else {
-        db.query(`SELECT * FROM products`, (error, results) => {
-            if (error) { console.log(error) } else {
-                // console.log(results)
-                results.forEach((items) => {
-                    let {item_id, product_name, department_name, price, stock_quantity} = items
-                    console.log(`${item_id} ${product_name} $${price} each (${stock_quantity} left in stock)`)
-                    // console.log(`
-                    //     ID: ${items.item_id}
-                    //     Name: ${items.product_name}
-                    //     Dept. Name: ${items.department_name}
-                    //     Price: $${items.price}
-                    // `)
-                })
-                process.exit()
-            }
-        })
+        productView()
     }
 })
+
+
+
+let productView = _ => {
+    db.query(`SELECT * FROM products`, (error, results) => {
+        if (error) { console.log(error) } else {
+            inquirer
+                .prompt([
+                    {
+                        name: 'choice',
+                        type: 'rawlist',
+                        choices: function () {
+                            let prodList = []
+                            results.forEach((items) => {
+                                let { item_id, product_name, department_name, price, stock_quantity } = items
+                                prodList.push(`${item_id} ${product_name} $${price} each (${stock_quantity} left in stock)`)
+                            })
+                            return prodList
+                        },
+                        message: 'Choose something to buy'
+                    },
+                    {
+                        name: 'qtyBuy',
+                        type: 'input',
+                        message: 'How many do you want to buy?'
+                    }
+                ])
+            // let prodList = []
+            // results.forEach((items) => {
+            //     let { item_id, product_name, department_name, price, stock_quantity } = items
+            //     prodList.push(`${item_id} ${product_name} $${price} each (${stock_quantity} left in stock)`)               
+            // })
+            // return prodList 
+
+            // console.log(prodList)
+        }
+    })
+}
