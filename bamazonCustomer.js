@@ -22,12 +22,12 @@ let productView = _ => {
     db.query(`SELECT * FROM products`, (error, results) => {
         if (error) { console.log(error) } else {
             inquirer
-                .prompt([
-                    {
-                        name: 'username',
-                        type: 'input',
-                        message: 'What is your name'
-                    },
+            .prompt([
+                    // {
+                    //     name: 'username',
+                    //     type: 'input',
+                    //     message: 'What is your name'
+                    // },
                     {
                         name: 'choice',
                         type: 'rawlist',
@@ -49,7 +49,7 @@ let productView = _ => {
                 ]).then((answer) => {
                     console.log(answer)
                     // process.exit()
-
+                    productView()
                 })
             // let prodList = []
             // results.forEach((items) => {
