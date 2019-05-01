@@ -3,6 +3,7 @@ const { createConnection } = require('mysql2')
 const inquirer = require('inquirer')
 
 let username 
+let shoppingCart = []
 
 // create connection 
 const db = createConnection({
@@ -47,19 +48,26 @@ let productView = _ => {
                         message: 'How many do you want to buy?'
                     }
                 ]).then((answer) => {
-                    console.log(answer)
+                    shoppingCart.push(answer)
+
                     // process.exit()
                     productView()
                 })
-            // let prodList = []
-            // results.forEach((items) => {
-            //     let { item_id, product_name, department_name, price, stock_quantity } = items
-            //     prodList.push(`${item_id} ${product_name} $${price} each (${stock_quantity} left in stock)`)               
-            // })
-            // return prodList 
 
-            // console.log(prodList)
-        }
-    })
+                // let prodList = []
+                // results.forEach((items) => {
+                    //     let { item_id, product_name, department_name, price, stock_quantity } = items
+                    //     prodList.push(`${item_id} ${product_name} $${price} each (${stock_quantity} left in stock)`)               
+                    // })
+                    // return prodList 
+                    
+                    // console.log(prodList)
+                }
+            })
 
+}
+
+let shoppingCartView = _ => {
+    console.log(shoppingCart)
+    
 }
