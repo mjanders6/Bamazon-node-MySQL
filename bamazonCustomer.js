@@ -26,6 +26,21 @@ async function prodView(column) {
     return response
 }
 
+// addToCart()
+// show items in DB, select one to buy, add it to shopping cart, remove from products DB
+// prompt to review cart, choose more items, exit
+
+// reviewCart()
+// show items in shopping cart
+// prompt to check out, remove items, choose more items, exit
+
+// checkOut()
+// total what is in the cart, add items to the purchased DB
+
+// removeCart()
+// show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
+// prompt to check out, remove items, choose more items, exit
+
 // let productView = _ => {
 //     db.query(`SELECT * FROM products`, (error, results) => {
 //         if (error) { console.log(error) } else {
@@ -70,15 +85,17 @@ const openBamazon = _ => {
                 case 'Product View / Go Shopping':
                     prodView('*')
                         .then(r => {
-                            r.forEach(({ item_id, product_name, department_name, price }) => {
-                                console.log(`
-                                    ==========
-                                    id: ${item_id} 
-                                    ${product_name} $${price}
-                                    ${department_name}
-                                    ==========
-                                    `)
-                            })
+                            console.log(r.map(({ product_name, price }) => `${product_name} $${price}`))
+                            
+                            // r.forEach(({ item_id, product_name, department_name, price }) => {
+                            //     console.log(`
+                            //         ==========
+                            //         id: ${item_id} 
+                            //         ${product_name} $${price}
+                            //         ${department_name}
+                            //         ==========
+                            //         `)
+                            // })
                             openBamazon()
                         })
                         .catch(e => console.log(e))
