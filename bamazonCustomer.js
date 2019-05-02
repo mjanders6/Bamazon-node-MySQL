@@ -77,7 +77,7 @@ const openBamazon = _ => {
                                     ${product_name} $${price}
                                     ${department_name}
                                     ==========
-                                `)
+                                    `)
                             })
                             openBamazon()
                         })
