@@ -85,8 +85,20 @@ const openBamazon = _ => {
                 case 'Product View / Go Shopping':
                     prodView('*')
                         .then(r => {
-                            console.log(r.map(({ product_name, price }) => `${product_name} $${price}`))
-                            
+                            console.log(r.map(({ item_id, product_name, price }) => `${item_id}.) ${product_name} $${price}`))
+                            prompt({
+                                type: 'rawlist',
+                                name: 'prodName',
+                                message: 'Select the item to purchase:',
+                                choices: r.map(({ product_name }) => `${product_name} `)
+                            })
+                            .then(({prodName}) => {
+                                console.log(prodName)
+                                openBamazon()
+                            })
+                            .catch(e => console.log(e))
+                                
+
                             // r.forEach(({ item_id, product_name, department_name, price }) => {
                             //     console.log(`
                             //         ==========
@@ -96,7 +108,7 @@ const openBamazon = _ => {
                             //         ==========
                             //         `)
                             // })
-                            openBamazon()
+                            // openBamazon()
                         })
                         .catch(e => console.log(e))
                     break;
