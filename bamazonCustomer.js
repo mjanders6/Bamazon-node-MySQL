@@ -26,17 +26,17 @@ async function prodView(column) {
     return response
 }
 
-const purchView = _ => {
-    prodView('*')
-        .then(r => {
-
-            r.forEach(({ item_id, product_name, price, stock_quantity }) => {
-                console.log(`
-                ${item_id}) ${product_name} ($${price} each) (${stock_quantity} left in stock)
-                `)
-            })
+async function shoppingCartView(column) {
+    let response = await new Promise((resolve, reject) => {
+        db.query(`SELECT ${column} FROM shopping_cart`, (error, results) => {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(results)
+            }
         })
-        .catch(e => console.log(e))
+    })
+    return response
 }
 
 // userName
@@ -127,7 +127,43 @@ const addToCart = _ => {
 // reviewCart()
 // show items in shopping cart
 // prompt to check out, remove items, choose more items, exit
+const reviewCart = _ => {
+    shoppingCartView('*')
+        .then((r) => {
+            console.log(r.map(({ item_id, product_name, price, purchase_quantity, total_cost }) => `${item_id}) ($${price} each) ${product_name} ${purchase_quantity} $${total_cost}`))
+            prompt({
+                type: 'list',
+                name: 'cartshow',
+                message: 'Select an option:',
+                choices: ['Back to Menu', 'Finalize Purchase', 'Remove an Item', 'Exit--->']
+            })
+                .then(({ cartshow }) => {
+                    switch (cartshow) {
+                        case 'Back to Menu':
+                            openBamazon()
+                            break;
 
+                        case 'Finalize Purchase':
+
+                            break;
+
+                        case 'Remove an Item':
+
+                            break;
+
+                        case 'Exit--->':
+                            process.exit()
+                            break;
+
+                        default:
+                            openBamazon()
+                            break;
+                    }
+                })
+                .catch(e => console.log(e))
+        })
+        .catch(e => console.log(e))
+}
 // checkOut()
 // total what is in the cart, add items to the purchased DB
 
@@ -135,12 +171,14 @@ const addToCart = _ => {
 // show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
 // prompt to check out, remove items, choose more items, exit
 
+
+// initial view
 const openBamazon = _ => {
     prompt({
         type: 'list',
         name: 'prodshow',
         message: 'Select an option:',
-        choices: ['Product View / Go Shopping', 'Check Shopping Cart', 'Check Out', 'Exit--->']
+        choices: ['Product View / Go Shopping', 'Check Shopping Cart', 'Exit--->']
     })
         .then(({ prodshow }) => {
             switch (prodshow) {
@@ -149,11 +187,7 @@ const openBamazon = _ => {
                     break;
 
                 case 'Check Shopping Cart':
-
-                    break;
-
-                case 'Check Out':
-
+                    reviewCart()
                     break;
 
                 case 'Exit--->':
