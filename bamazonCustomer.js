@@ -135,11 +135,11 @@ const checkOut = _ => {
             }
             // console.log(que)
 
-            db.query(`INSERT INTO purchased(user_name, product_name, department_name, price, purchase_quantity, total_cost) VALUES ?`, 
-            [que], (err) => {
-                if (err) throw err
-                // console.log('Added to shopping cart!')
-            })
+            db.query(`INSERT INTO purchased(user_name, product_name, department_name, price, purchase_quantity, total_cost) VALUES ?`,
+                [que], (err) => {
+                    if (err) throw err
+                    // console.log('Added to shopping cart!')
+                })
 
             db.query(`DELETE FROM shopping_cart WHERE ?`, { user_name: username }, (err, r) => {
                 if (err) throw err
@@ -154,6 +154,14 @@ const checkOut = _ => {
 // removeCart()
 // show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
 // prompt to check out, remove items, choose more items, exit
+const removeCart = _ => {
+    shoppingCartView('*')
+        .then(r => {
+
+        })
+        .catch(e => console.log(e))
+}
+
 
 // reviewCart()
 // show items in shopping cart

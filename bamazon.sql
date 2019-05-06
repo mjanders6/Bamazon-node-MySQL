@@ -45,5 +45,3 @@
 -- ('Mouse', 'Electronics', 25, 2), 
 -- ('Rebok Shoes', 'Footware', 30, 20), 
 -- ('Trash Can', 'Household', 10, 500);
-
--- SELECT * FROM products;
