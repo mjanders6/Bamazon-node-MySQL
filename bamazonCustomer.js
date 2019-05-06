@@ -28,7 +28,7 @@ async function prodView(column) {
 
 async function shoppingCartView(column) {
     let response = await new Promise((resolve, reject) => {
-        db.query(`SELECT ${column} FROM shopping_cart Where ?`, {user_name: username}, (error, results) => {
+        db.query(`SELECT ${column} FROM shopping_cart Where ?`, { user_name: username }, (error, results) => {
             if (error) {
                 reject(error)
             } else {
@@ -38,6 +38,21 @@ async function shoppingCartView(column) {
     })
     return response
 }
+
+// total
+async function shoppingCartTotal() {
+    let response = await new Promise((resolve, reject) => {
+        db.query(`SELECT SUM(total_cost) total FROM shopping_cart WHERE ?`, { user_name: username }, (error, results) => {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(results)
+            }
+        })
+    })
+    return response
+}
+
 
 // userName
 const userName = _ => {
@@ -49,7 +64,6 @@ const userName = _ => {
         .then(({ uName }) => {
             username = uName
             openBamazon()
-            // process.exit()
         })
         .catch(e => console.log(e))
 }
@@ -61,7 +75,6 @@ const addToCart = _ => {
     prodView('*')
         .then(r => {
             console.log(r.map(({ item_id, product_name, price, stock_quantity }) => `${item_id}) ${product_name} ($${price} each) (${stock_quantity} left in stock)`))
-
             prompt([{
                 type: 'rawlist',
                 name: 'product_name',
@@ -123,6 +136,12 @@ const addToCart = _ => {
         .catch(e => console.log(e))
 }
 
+// checkOut()
+// total what is in the cart, add items to the purchased DB
+
+// removeCart()
+// show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
+// prompt to check out, remove items, choose more items, exit
 
 // reviewCart()
 // show items in shopping cart
@@ -130,7 +149,16 @@ const addToCart = _ => {
 const reviewCart = _ => {
     shoppingCartView('*')
         .then((r) => {
+            let s = 0
+            for (i = 0; i < r.length; i++) {
+                s += parseInt(r[i].total_cost)
+            }
             console.log(r.map(({ item_id, product_name, price, purchase_quantity, total_cost }) => `${item_id}) ($${price} each) ${product_name} ${purchase_quantity} $${total_cost}`))
+            console.log(`
+            
+            The Total Cost is: $${s}
+            
+            `)
             prompt({
                 type: 'list',
                 name: 'cartshow',
@@ -164,13 +192,6 @@ const reviewCart = _ => {
         })
         .catch(e => console.log(e))
 }
-// checkOut()
-// total what is in the cart, add items to the purchased DB
-
-// removeCart()
-// show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
-// prompt to check out, remove items, choose more items, exit
-
 
 // initial view
 const openBamazon = _ => {
@@ -183,7 +204,7 @@ const openBamazon = _ => {
         }
     ])
         .then(({ prodshow }) => {
-            
+
             switch (prodshow) {
                 case 'Product View / Go Shopping':
                     addToCart()
@@ -191,6 +212,7 @@ const openBamazon = _ => {
 
                 case 'Check Shopping Cart':
                     reviewCart()
+
                     break;
 
                 case 'Exit--->':
