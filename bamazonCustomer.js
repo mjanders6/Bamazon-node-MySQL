@@ -88,7 +88,9 @@ const addToCart = _ => {
                         console.log('not enough stock')
                         addToCart()
                     } else {
-                        console.log('thank you')
+                        console.log(`
+                        ${cart.product_name} added to your shopping cart
+                        `)
                         db.query(`INSERT INTO shopping_cart SET ?`, {
                             user_name: username,
                             product_name: cart.product_name,
@@ -98,7 +100,7 @@ const addToCart = _ => {
                             total_cost: cart.totalCost
                         }, (err) => {
                             if (err) throw err
-                            console.log('Added to shopping cart!')
+                            // console.log('Added to shopping cart!')
                             // addToCart()
                         })
 
@@ -112,7 +114,7 @@ const addToCart = _ => {
                                 }
                             ], (err) => {
                                 if (err) throw err
-                                console.log('added')
+                                // console.log('added')
                             })
                         openBamazon()
                     }
@@ -133,7 +135,9 @@ const checkOut = _ => {
             for (i = 0; i < r.length; i++) {
                 que.push([r[i].user_name, r[i].product_name, r[i].department_name, r[i].price, r[i].purchase_quantity, r[i].total_cost])
             }
-            // console.log(que)
+            console.log(`
+            Thank you for shopping at Bamazon!
+            `)
 
             db.query(`INSERT INTO purchased(user_name, product_name, department_name, price, purchase_quantity, total_cost) VALUES ?`,
                 [que], (err) => {
