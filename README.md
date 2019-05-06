@@ -15,6 +15,9 @@ When the shopping is done the transaction can be completed. When the Checkout op
 
 # Future
 
+## Future tables
+1. departments
+
 ### Enhanced view
 [Table from NPM](https://www.npmjs.com/package/table#table-usage-predefined-border-templates) can be used to enhance the command line look. 
 
