@@ -39,21 +39,6 @@ async function shoppingCartView(column) {
     return response
 }
 
-// total
-async function shoppingCartTotal() {
-    let response = await new Promise((resolve, reject) => {
-        db.query(`SELECT SUM(total_cost) total FROM shopping_cart WHERE ?`, { user_name: username }, (error, results) => {
-            if (error) {
-                reject(error)
-            } else {
-                resolve(results)
-            }
-        })
-    })
-    return response
-}
-
-
 // userName
 const userName = _ => {
     prompt({
@@ -63,6 +48,9 @@ const userName = _ => {
     })
         .then(({ uName }) => {
             username = uName
+            console.log(`
+            Hello ${username}, welcome to Bamazon!
+            `)
             openBamazon()
         })
         .catch(e => console.log(e))
@@ -124,8 +112,7 @@ const addToCart = _ => {
                                 }
                             ], (err) => {
                                 if (err) throw err
-                                // console.log('added')
-                                // addToCart()
+                                console.log('added')
                             })
                         openBamazon()
                     }
@@ -138,6 +125,31 @@ const addToCart = _ => {
 
 // checkOut()
 // total what is in the cart, add items to the purchased DB
+const checkOut = _ => {
+    shoppingCartView('*')
+        .then(r => {
+            // let [{ user_name, product_name, department_name, price, purchase_quantity, total_cost }] = r
+            let que = []
+            for (i = 0; i < r.length; i++) {
+                que.push([r[i].user_name, r[i].product_name, r[i].department_name, r[i].price, r[i].purchase_quantity, r[i].total_cost])
+            }
+            // console.log(que)
+
+            db.query(`INSERT INTO purchased(user_name, product_name, department_name, price, purchase_quantity, total_cost) VALUES ?`, 
+            [que], (err) => {
+                if (err) throw err
+                // console.log('Added to shopping cart!')
+            })
+
+            db.query(`DELETE FROM shopping_cart WHERE ?`, { user_name: username }, (err, r) => {
+                if (err) throw err
+                // console.log('')
+            })
+            openBamazon()
+        })
+        .catch(e => console.log(e))
+}
+
 
 // removeCart()
 // show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
@@ -155,9 +167,7 @@ const reviewCart = _ => {
             }
             console.log(r.map(({ item_id, product_name, price, purchase_quantity, total_cost }) => `${item_id}) ($${price} each) ${product_name} ${purchase_quantity} $${total_cost}`))
             console.log(`
-            
             The Total Cost is: $${s}
-            
             `)
             prompt({
                 type: 'list',
@@ -172,7 +182,7 @@ const reviewCart = _ => {
                             break;
 
                         case 'Finalize Purchase':
-
+                            checkOut()
                             break;
 
                         case 'Remove an Item':
@@ -230,6 +240,5 @@ const openBamazon = _ => {
 db.connect(e => {
     if (e) { console.log(e) } else {
         (!username) ? userName() : openBamazon()
-        // purchView()
     }
 })

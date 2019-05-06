@@ -1,7 +1,7 @@
 -- DROP DATABASE IF EXISTS bamazon;
 -- CREATE DATABASE bamazon;
 
-USE bamazon;
+-- USE bamazon;
 
 -- CREATE TABLE products (
 -- item_id INT AUTO_INCREMENT NOT NULL,
@@ -19,6 +19,7 @@ USE bamazon;
 -- department_name VARCHAR(30) NOT NULL,
 -- price INT NOT NULL,
 -- purchase_quantity INT NOT NULL,
+-- total_cost DECIMAL(20,4) NOT NULL,
 -- PRIMARY KEY (item_id)
 -- );
 
