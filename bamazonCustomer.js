@@ -85,7 +85,9 @@ const addToCart = _ => {
                     // console.log(cart)
 
                     if (response.selQTY > cart.stock_quantity) {
-                        console.log('not enough stock')
+                        console.log(`
+                        Sorry, not enough stock. Please revise the QTY.
+                        `)
                         addToCart()
                     } else {
                         console.log(`
