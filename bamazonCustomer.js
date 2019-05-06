@@ -28,7 +28,7 @@ async function prodView(column) {
 
 async function shoppingCartView(column) {
     let response = await new Promise((resolve, reject) => {
-        db.query(`SELECT ${column} FROM shopping_cart`, (error, results) => {
+        db.query(`SELECT ${column} FROM shopping_cart Where ?`, {user_name: username}, (error, results) => {
             if (error) {
                 reject(error)
             } else {
@@ -48,7 +48,7 @@ const userName = _ => {
     })
         .then(({ uName }) => {
             username = uName
-            addToCart()
+            openBamazon()
             // process.exit()
         })
         .catch(e => console.log(e))
@@ -174,16 +174,19 @@ const reviewCart = _ => {
 
 // initial view
 const openBamazon = _ => {
-    prompt({
-        type: 'list',
-        name: 'prodshow',
-        message: 'Select an option:',
-        choices: ['Product View / Go Shopping', 'Check Shopping Cart', 'Exit--->']
-    })
+    prompt([
+        {
+            type: 'list',
+            name: 'prodshow',
+            message: 'Select an option:',
+            choices: ['Product View / Go Shopping', 'Check Shopping Cart', 'Exit--->']
+        }
+    ])
         .then(({ prodshow }) => {
+            
             switch (prodshow) {
                 case 'Product View / Go Shopping':
-                    (!username) ? userName() : addToCart()
+                    addToCart()
                     break;
 
                 case 'Check Shopping Cart':
@@ -204,7 +207,7 @@ const openBamazon = _ => {
 
 db.connect(e => {
     if (e) { console.log(e) } else {
-        openBamazon()
+        (!username) ? userName() : openBamazon()
         // purchView()
     }
 })
