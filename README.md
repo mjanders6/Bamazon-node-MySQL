@@ -18,6 +18,14 @@ When the shopping is done the transaction can be completed. When the Checkout op
 ### Enhanced view
 [Table from NPM](https://www.npmjs.com/package/table#table-usage-predefined-border-templates) can be used to enhance the command line look. 
 
-### Manager View
+### Manager View actions
 
-### Supervisor View
+1. View products for sale
+1. View low inventory
+1. Add to inventory
+1. Add new products
+
+### Supervisor View actions 
+
+1. View product sales by Department
+1. Create new Departments
