@@ -161,11 +161,31 @@ const checkOut = _ => {
 // show items in shopping cart, select one to remove, remove it from the shopping cart, add it back to products DB, 
 // prompt to check out, remove items, choose more items, exit
 const removeCart = _ => {
-    shoppingCartView('*')
-        .then(r => {
-
-        })
-        .catch(e => console.log(e))
+    console.log(`
+    Need to create a delete action in the shopping cart
+    `)
+    openBamazon()
+    // shoppingCartView('*')
+    //     .then(r => {
+    //         console.log(r)
+    //         prompt({
+    //             type: 'rawlist',
+    //             name: 'itemRemove',
+    //             message: 'Select the item to purchase:',
+    //             choices: r.map(({ product_name}) => product_name)
+    //         })
+    //         .then(({ itemRemove, item_id }) => {
+    //             // let {item_id, user_name, product_name, department_name, price, purchase_quantity } = r
+    //             // db.query(`DELETE FROM shopping_cart WHERE ?`, [{item_id}], (err, r) => {
+    //             //     if (err) throw err
+    //             //     // console.log()
+    //             // })
+    //             console.log(item_id)
+    //             openBamazon()
+    //             })
+    //             .catch(e => console.log(e))
+    //     })
+    //     .catch(e => console.log(e))
 }
 
 
@@ -200,7 +220,7 @@ const reviewCart = _ => {
                             break;
 
                         case 'Remove an Item':
-
+                            removeCart()
                             break;
 
                         case 'Exit--->':
@@ -253,6 +273,7 @@ const openBamazon = _ => {
 
 db.connect(e => {
     if (e) { console.log(e) } else {
-        (!username) ? userName() : openBamazon()
+        // (!username) ? userName() : openBamazon()
+        (!username) ? userName() : removeCart()
     }
 })

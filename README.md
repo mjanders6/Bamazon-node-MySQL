@@ -15,6 +15,9 @@ When the shopping is done the transaction can be completed. When the Checkout op
 
 # Future
 
+## Remove from the shopping cart
+Need to create a function to remove a selection from the shopping cart and add it back to inventory. 
+
 ## Future tables
 1. departments
 
