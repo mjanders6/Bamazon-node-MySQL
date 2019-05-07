@@ -13,6 +13,7 @@ const db = createConnection({
     database: process.env.BAMAZON_DB
 })
 
+// async function to SELECT  data from the products db
 async function prodView(column) {
     let response = await new Promise((resolve, reject) => {
         db.query(`SELECT ${column} FROM products`, (error, results) => {
@@ -26,6 +27,7 @@ async function prodView(column) {
     return response
 }
 
+// async function to SELECT data from the shopping_cart db
 async function shoppingCartView(column) {
     let response = await new Promise((resolve, reject) => {
         db.query(`SELECT ${column} FROM shopping_cart Where ?`, { user_name: username }, (error, results) => {
@@ -39,7 +41,7 @@ async function shoppingCartView(column) {
     return response
 }
 
-// userName
+// initialize/register a userName 
 const userName = _ => {
     prompt({
         type: 'input',
@@ -62,6 +64,7 @@ const userName = _ => {
 const addToCart = _ => {
     prodView('*')
         .then(r => {
+            // show what is in stock prior to making selections 
             console.log(r.map(({ item_id, product_name, price, stock_quantity }) => `${item_id}) ${product_name} ($${price} each) (${stock_quantity} left in stock)`))
             prompt([{
                 type: 'rawlist',
@@ -84,6 +87,7 @@ const addToCart = _ => {
                     cart.totalCost = response.selQTY * cart.price
                     // console.log(cart)
 
+                    // validate if there is enough stock
                     if (response.selQTY > cart.stock_quantity) {
                         console.log(`
                         Sorry, not enough stock. Please revise the QTY.
@@ -93,6 +97,7 @@ const addToCart = _ => {
                         console.log(`
                         ${cart.product_name} added to your shopping cart
                         `)
+                        // add the data to the shopping_cart db
                         db.query(`INSERT INTO shopping_cart SET ?`, {
                             user_name: username,
                             product_name: cart.product_name,
@@ -106,6 +111,7 @@ const addToCart = _ => {
                             // addToCart()
                         })
 
+                        // update the products db to remove item from inventory
                         db.query(`UPDATE products SET ? WHERE ?`,
                             [
                                 {
@@ -140,13 +146,13 @@ const checkOut = _ => {
             console.log(`
             Thank you for shopping at Bamazon!
             `)
-
+            // batch insert the shopping cart items into the purchased db. this keeps a history of transactions. 
             db.query(`INSERT INTO purchased(user_name, product_name, department_name, price, purchase_quantity, total_cost) VALUES ?`,
                 [que], (err) => {
                     if (err) throw err
                     // console.log('Added to shopping cart!')
                 })
-
+            // remove items from the shopping cart
             db.query(`DELETE FROM shopping_cart WHERE ?`, { user_name: username }, (err, r) => {
                 if (err) throw err
                 // console.log('')
@@ -195,6 +201,7 @@ const removeCart = _ => {
 const reviewCart = _ => {
     shoppingCartView('*')
         .then((r) => {
+            // total what is in the shopping cart
             let s = 0
             for (i = 0; i < r.length; i++) {
                 s += parseInt(r[i].total_cost)
@@ -273,7 +280,6 @@ const openBamazon = _ => {
 
 db.connect(e => {
     if (e) { console.log(e) } else {
-        // (!username) ? userName() : openBamazon()
-        (!username) ? userName() : removeCart()
+        (!username) ? userName() : openBamazon()
     }
 })
