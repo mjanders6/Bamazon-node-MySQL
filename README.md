@@ -13,6 +13,9 @@ When an item is chosen it is removed from the Products table and sent to the Sho
 
 When the shopping is done the transaction can be completed. When the Checkout option is selected the items in the Shopping Cart table are removed from the Shopping Cart and then added to the Purchased table to keep a history on transactions. 
 
+# Link to Project Video
+[Project Video](https://drive.google.com/file/d/1bARBkGNNhy5w8xFSzj5uvl2rGA4tfA41/view?usp=sharing)
+
 # Future
 
 ## Remove from the shopping cart
