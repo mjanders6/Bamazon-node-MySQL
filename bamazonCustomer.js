@@ -64,8 +64,10 @@ const userName = _ => {
 const addToCart = _ => {
     prodView('*')
         .then(r => {
+            let [{ user_name, product_name, department_name, price, stock_quantity }] = r
+            console.table(r)
             // show what is in stock prior to making selections 
-            console.log(r.map(({ item_id, product_name, price, stock_quantity }) => `${item_id}) ${product_name} ($${price} each) (${stock_quantity} left in stock)`))
+            // console.log(r.map(({ item_id, product_name, price, stock_quantity }) => `${item_id}) ${product_name} ($${price} each) (${stock_quantity} left in stock)`))
             prompt([{
                 type: 'rawlist',
                 name: 'product_name',
@@ -128,7 +130,6 @@ const addToCart = _ => {
                     }
                 })
                 .catch(e => console.log(e))
-
         })
         .catch(e => console.log(e))
 }
@@ -138,7 +139,7 @@ const addToCart = _ => {
 const checkOut = _ => {
     shoppingCartView('*')
         .then(r => {
-            // let [{ user_name, product_name, department_name, price, purchase_quantity, total_cost }] = r
+            let [{ user_name, product_name, department_name, price, purchase_quantity, total_cost }] = r
             let que = []
             for (i = 0; i < r.length; i++) {
                 que.push([r[i].user_name, r[i].product_name, r[i].department_name, r[i].price, r[i].purchase_quantity, r[i].total_cost])
@@ -171,27 +172,6 @@ const removeCart = _ => {
     Need to create a delete action in the shopping cart
     `)
     openBamazon()
-    // shoppingCartView('*')
-    //     .then(r => {
-    //         console.log(r)
-    //         prompt({
-    //             type: 'rawlist',
-    //             name: 'itemRemove',
-    //             message: 'Select the item to purchase:',
-    //             choices: r.map(({ product_name}) => product_name)
-    //         })
-    //         .then(({ itemRemove, item_id }) => {
-    //             // let {item_id, user_name, product_name, department_name, price, purchase_quantity } = r
-    //             // db.query(`DELETE FROM shopping_cart WHERE ?`, [{item_id}], (err, r) => {
-    //             //     if (err) throw err
-    //             //     // console.log()
-    //             // })
-    //             console.log(item_id)
-    //             openBamazon()
-    //             })
-    //             .catch(e => console.log(e))
-    //     })
-    //     .catch(e => console.log(e))
 }
 
 
@@ -206,7 +186,9 @@ const reviewCart = _ => {
             for (i = 0; i < r.length; i++) {
                 s += parseInt(r[i].total_cost)
             }
-            console.log(r.map(({ item_id, product_name, price, purchase_quantity, total_cost }) => `${item_id}) ($${price} each) ${product_name} ${purchase_quantity} $${total_cost}`))
+            let [{ item_id, product_name, price, purchase_quantity, total_cost }] = r
+            console.table(r)
+            // console.log(r.map(({ item_id, product_name, price, purchase_quantity, total_cost }) => `${item_id}) ($${price} each) ${product_name} ${purchase_quantity} $${total_cost}`))
             console.log(`
             The Total Cost is: $${s}
             `)
